@@ -287,6 +287,10 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
+app.get('/api/health', async (req, res) => {
+  res.status(200).json({ message: "Service is running smoothly." });
+} );
+
 // --- AUTH/ME (return current user profile from token) ---
 
 app.get('/api/auth/me', async (req, res) => {
