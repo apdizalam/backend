@@ -5,14 +5,24 @@ const cors = require('cors');
 
 const app = express();
 
-const allowedOrigins = ['https://shaba-water-billing-system.vercel.app'];
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('CORS policy: origin not allowed'));
+    if (!origin) {
+      return callback(null, true);
     }
+
+    const allowedVercelHost = 'vercel.app';
+    const allowedProjectPrefix = 'shaba-water-billing-system';
+    const lowerOrigin = origin.toLowerCase();
+
+    if (
+      lowerOrigin === 'https://shaba-water-billing-system.vercel.app' ||
+      (lowerOrigin.endsWith(`.${allowedVercelHost}`) && lowerOrigin.includes(allowedProjectPrefix))
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('CORS policy: origin not allowed'));
   },
   credentials: true,
 }));
